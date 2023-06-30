@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Camera Website</title>
+  <style>
+    #videoElement {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    #captureButton {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #downloadButton {
+      display: none;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Camera Website</h1>
+  <video id="videoElement" autoplay></video>
+  <button id="captureButton">Capture</button>
+  <a href="#" id="downloadButton" download="captured-image.jpg">Download Image</a>
+  <script src="main.js"></script>
+</body>
+</html>
